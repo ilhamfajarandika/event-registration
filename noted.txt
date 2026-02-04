@@ -1,0 +1,85 @@
+Main Feature
+1. User Authentication
+    User registration with email & password
+    Login & Logout
+    Detail & update profile
+
+2. Event Information (Single Event)
+    Show event Detail
+    date, location, dan event description
+
+3. Registration System
+    User registration for event
+    Generate QR Code for e-ticket
+    Check-in user (admin)
+
+4. Dashboard
+    User dashboard: registration status & e-ticket
+    Admin dashboard: list user & check-in
+
+=================================================================================
+
+Endpoint API
+1. Authentication
+    POST /api/auth/register
+    POST /api/auth/login
+    POST /api/auth/logout
+    GET /api/auth/me
+    PUT /api/auth/me
+
+2. Events
+    GET     /api/events                  # Get all events
+
+3. Registrations
+
+    POST /api/registrations     # Register to event
+    GET /api/registrations/my   # Registration for user
+    GET /api/registrations/:id  # Detail registration (e-ticket)
+
+4. Admin
+
+    GET /api/admin/registrations                # User list
+    PUT /api/admin/registrations/:id/check-in   # User Check-in 
+
+=================================================================================
+
+List Page
+A. Public Pages
+    1. Landing Page (/)
+        Brief event information
+        Date & location
+        CTA: Register / Login
+
+    2. Events Detail (/events)
+        Complete event details
+        Description & benefits
+        Register button
+
+    3. Login/Register (/login, /register)
+        Login form
+        Registration form
+
+B. User Pages
+    1. User Dashboard (/dashboard)
+        Registration status
+        E-ticket access (QR Code)
+
+    2. Registration Detail (/registrations/:id)
+        E-ticket with QR Code
+        Event information
+        Check-in status
+
+    3. Profile Page (/profile)
+        Edit name
+        Edit email
+
+C. Admin Pages 
+    1. Admin Dashboard (/admin)
+        Overview statistics
+        Recent registrations
+        Event management quick actions
+
+    2. Participants Management (/admin/participants)
+        Participant list    
+        Search by name/email
+        Participant check-in
