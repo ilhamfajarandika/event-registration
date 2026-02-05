@@ -7,7 +7,7 @@ export default function PopularShows() {
     <section className="max-w-6xl mx-auto px-4 pb-10">
       <div className="text-center">
         <h3 className="text-2xl md:text-3xl font-black text-slate-900">Popular Shows</h3>
-        <p className="mt-2 text-slate-600">Rekomendasi show yang paling sering dibooking.</p>
+        <p className="mt-2 text-slate-600">Show Terdahulu Yang Paling Banyak Dibooking</p>
       </div>
 
       <div className="mt-6 flex gap-4 overflow-x-auto pb-3">

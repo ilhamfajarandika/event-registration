@@ -24,7 +24,7 @@ export default function Hero() {
             </h1>
 
             <p className="mt-3 text-slate-600 max-w-xl">
-              Pilih Negara, tanggal, dan kategori tiket untuk konser grup idol <b>Heart2Hearts</b>.
+              Pilih Tanggal dan Kategori tiket untuk konser grup idol <b>Heart2Hearts</b>.
               Checkout cepat, aman, dan kantong-friendly.
             </p>
 
