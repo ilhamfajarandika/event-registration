@@ -1,3 +1,37 @@
+export const eventMock = {
+  id: "heart2hearts-2026",
+  title: "Heart2Hearts Concert",
+  city: "Jakarta",
+  venue: "GBK Stadium, Jakarta",
+  dates: [
+    { id: "day1", value: "2026-02-14", label: "14 Februari 2026" },
+    { id: "day2", value: "2026-02-15", label: "15 Februari 2026" },
+  ],
+  tiers: [
+    {
+      id: "vip-pink",
+      name: "VIP Pink",
+      price: "Rp 2.500.000",
+      desc: "Best view + akses eksklusif paling dekat panggung.",
+      perks: ["Best view", "Priority entry", "Merch pack", "QR e-ticket"],
+    },
+    {
+      id: "cat-1-sky",
+      name: "Cat 1 Sky",
+      price: "Rp 1.750.000",
+      desc: "Tribune utama, view nyaman dan value terbaik.",
+      perks: ["Tribune utama", "Entry reguler", "Akses merch", "QR e-ticket"],
+    },
+    {
+      id: "festival",
+      name: "Festival",
+      price: "Rp 1.250.000",
+      desc: "Standing area paling seru buat sing-along.",
+      perks: ["Standing area", "First come", "Akses merch", "QR e-ticket"],
+    },
+  ],
+};
+
 export const featuredTickets = [
   {
     city: "Jakarta",
@@ -7,26 +41,6 @@ export const featuredTickets = [
       { name: "VIP Pink", price: "Rp 2.500.000" },
       { name: "Cat 1 Sky", price: "Rp 1.750.000" },
       { name: "Festival", price: "Rp 1.250.000" },
-    ],
-  },
-  {
-    city: "Bandung",
-    venue: "Saparua Hall",
-    date: "2026-05-25",
-    tiers: [
-      { name: "VIP Pink", price: "Rp 2.200.000" },
-      { name: "Cat 1 Sky", price: "Rp 1.600.000" },
-      { name: "Cat 2", price: "Rp 1.100.000" },
-    ],
-  },
-  {
-    city: "Surabaya",
-    venue: "DBL Arena",
-    date: "2026-05-29",
-    tiers: [
-      { name: "VIP Pink", price: "Rp 2.300.000" },
-      { name: "Cat 1 Sky", price: "Rp 1.650.000" },
-      { name: "Festival", price: "Rp 1.200.000" },
     ],
   },
 ];
