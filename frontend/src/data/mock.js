@@ -67,3 +67,19 @@ export const testimoni = [
     text: "Tampilan mobile-nya rapi. Aku beli VIP Pink tanpa bingung.",
   },
 ];
+
+export const userDashboardMock = {
+  user: {
+    name: "Aji",
+    email: "ajin7133@gmail.com",
+  },
+  registration: {
+    id: "reg-001",
+    status: "PAID", // "NONE" | "PENDING" | "PAID" | "CHECKED_IN"
+    tierId: "vip-pink",
+    qty: 2,
+    dayValue: "2026-02-14",
+    purchasedAt: "2026-02-06T19:20:00Z",
+    checkInAt: null,
+  },
+};
