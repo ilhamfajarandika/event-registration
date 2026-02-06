@@ -31,13 +31,11 @@ Endpoint API
     GET     /api/events                  # Get all events
 
 3. Registrations
-
     POST /api/registrations     # Register to event
     GET /api/registrations/my   # Registration for user
     GET /api/registrations/:id  # Detail registration (e-ticket)
 
 4. Admin
-
     GET /api/admin/registrations                # User list
     PUT /api/admin/registrations/:id/check-in   # User Check-in 
 
