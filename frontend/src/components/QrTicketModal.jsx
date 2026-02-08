@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import QRCode from "react-qr-code";
 
 export default function QrTicketModal({ open, onClose, ticket }) {
-  // close dengan ESC
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e) => {
@@ -23,7 +22,6 @@ export default function QrTicketModal({ open, onClose, ticket }) {
     <AnimatePresence>
       {open && (
         <>
-          {/* overlay */}
           <motion.button
             type="button"
             className="fixed inset-0 z-[60] bg-black/35"
@@ -34,14 +32,12 @@ export default function QrTicketModal({ open, onClose, ticket }) {
             aria-label="Close QR modal"
           />
 
-          {/* ✅ wrapper full-screen (scroll safe) */}
           <motion.div
             className="fixed inset-0 z-[61] overflow-y-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* ✅ padding top/bottom biar ga kepotong */}
             <div className="min-h-full flex items-center justify-center p-4 py-10">
               <motion.div
                 className="w-full max-w-lg rounded-[28px] bg-white border border-white/70 shadow-2xl overflow-hidden"
@@ -52,7 +48,6 @@ export default function QrTicketModal({ open, onClose, ticket }) {
                 role="dialog"
                 aria-modal="true"
               >
-                {/* header */}
                 <div className="p-5 border-b border-skysoft-100 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-black text-skysoft-700 tracking-wider">
@@ -72,7 +67,6 @@ export default function QrTicketModal({ open, onClose, ticket }) {
                   </button>
                 </div>
 
-                {/* body */}
                 <div className="p-6">
                   <div className="rounded-[24px] bg-gradient-to-r from-skysoft-50 via-white to-pinkpop-500/10 border border-skysoft-100 p-6">
                     <div className="flex items-center justify-between">
@@ -89,7 +83,6 @@ export default function QrTicketModal({ open, onClose, ticket }) {
                       {ticket?.dateLabel || "14 Februari"}
                     </div>
 
-                    {/* ✅ QR REAL */}
                     <div className="mt-5 grid place-items-center">
                       <div className="rounded-[22px] bg-white border border-skysoft-200 shadow-soft p-4">
                         <div className="rounded-[18px] bg-white p-3">
@@ -117,7 +110,6 @@ export default function QrTicketModal({ open, onClose, ticket }) {
                     </div>
                   </div>
 
-                  {/* tips */}
                   <div className="mt-4 rounded-[22px] bg-skysoft-50 border border-skysoft-100 p-5">
                     <div className="font-black text-slate-900">Tips check-in</div>
                     <ul className="mt-3 space-y-2 text-sm text-slate-700">
@@ -136,7 +128,6 @@ export default function QrTicketModal({ open, onClose, ticket }) {
                     </ul>
                   </div>
 
-                  {/* actions */}
                   <div className="mt-5 flex gap-3">
                     <button
                       type="button"

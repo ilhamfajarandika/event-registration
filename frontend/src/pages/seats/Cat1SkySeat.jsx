@@ -1,14 +1,37 @@
 import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "../../components/Navbar.jsx";
 import { eventMock } from "../../data/mock.js";
 
 export default function Cat1SkySeat() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [sp] = useSearchParams();
+
   const tier = useMemo(() => eventMock.tiers.find((t) => t.id === "cat-1-sky"), []);
-  const [qty, setQty] = useState(1);
-  const [day, setDay] = useState(eventMock.dates[0]?.value ?? "");
+
+  const initialQty = Math.max(1, Number(sp.get("qty") || 1));
+  const initialDate = sp.get("date") || eventMock.dates[0]?.value || "";
+
+  const [qty, setQty] = useState(initialQty);
+  const [day, setDay] = useState(initialDate);
+
   const dayLabel = eventMock.dates.find((d) => d.value === day)?.label ?? day;
+
+  const handleBuy = () => {
+    const raw = localStorage.getItem("h2h_auth");
+    const auth = raw ? JSON.parse(raw) : null;
+    const isLoggedIn = Boolean(auth?.isLoggedIn);
+
+    if (!isLoggedIn) {
+      const redirectTo = `${location.pathname}?date=${encodeURIComponent(day)}&qty=${encodeURIComponent(qty)}`;
+      navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`);
+      return;
+    }
+
+    alert(`✅ Logged in. Proceed checkout: ${tier?.name} • ${dayLabel} • Qty ${qty}`);
+  };
 
   if (!tier) return null;
 
@@ -20,12 +43,10 @@ export default function Cat1SkySeat() {
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      {/* ✅ Navbar sama seperti Landing */}
       <Navbar />
 
       <section className="max-w-6xl mx-auto px-4 pt-10 pb-12">
         <div className="grid lg:grid-cols-2 gap-10">
-          {/* LEFT CARD */}
           <motion.div
             whileHover={{ y: -4 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
@@ -34,11 +55,9 @@ export default function Cat1SkySeat() {
             <div className="h-24 bg-gradient-to-r from-skysoft-600/70 via-white to-pinkpop-500/25" />
 
             <div className="p-8">
-              <div className="text-xs font-black text-skysoft-700">CAT 1 SKY</div>
               <h1 className="mt-3 text-4xl font-black text-slate-900">{tier.name}</h1>
               <p className="mt-2 text-slate-600 text-lg">{tier.desc}</p>
 
-              {/* 4 info cards */}
               <div className="mt-8 grid sm:grid-cols-2 gap-5">
                 <InfoPill title="View nyaman" text="Tribune utama, angle bagus." />
                 <InfoPill title="Value terbaik" text="Harga pas untuk experience premium." />
@@ -46,7 +65,6 @@ export default function Cat1SkySeat() {
                 <InfoPill title="Merch access" text="Akses area merchandise." />
               </div>
 
-              {/* Venue + price + perks */}
               <div className="mt-8 rounded-[24px] bg-skysoft-50 border border-skysoft-100 p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="text-lg font-black text-slate-900">{eventMock.venue}</div>
@@ -62,16 +80,9 @@ export default function Cat1SkySeat() {
                   ))}
                 </ul>
               </div>
-
-              {/* bottom nav buttons */}
-              <div className="mt-8 flex gap-4">
-                <HoverLinkButton to="/seats/vip-pink">View VIP</HoverLinkButton>
-                <HoverLinkButton to="/seats/festival">View Festival</HoverLinkButton>
-              </div>
             </div>
           </motion.div>
 
-          {/* RIGHT CHECKOUT CARD */}
           <CheckoutCard
             tier={tier}
             day={day}
@@ -79,6 +90,11 @@ export default function Cat1SkySeat() {
             qty={qty}
             setQty={setQty}
             dayLabel={dayLabel}
+            onClose={() => {
+              if (window.history.length > 1) navigate(-1);
+              else navigate("/events");
+            }}
+            onBuy={handleBuy}
           />
         </div>
       </section>
@@ -99,19 +115,29 @@ function InfoPill({ title, text }) {
   );
 }
 
-function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel }) {
+function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, onClose, onBuy }) {
   return (
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
-      className="rounded-[28px] bg-white border border-white/70 shadow-soft overflow-hidden"
+      className="rounded-[28px] bg-white border border-white/70 shadow-soft overflow-hidden relative"
     >
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute right-4 top-4 h-11 w-11 rounded-2xl bg-white border border-slate-200 shadow-soft
+                   hover:bg-slate-50 transition font-black text-slate-900"
+        aria-label="Close checkout"
+        title="Close"
+      >
+        ✕
+      </button>
+
       <div className="p-8">
         <div className="text-xs font-black text-slate-900 tracking-wide">CHECKOUT</div>
         <h2 className="mt-4 text-4xl font-black text-slate-900">Buy {tier.name}</h2>
 
         <div className="mt-10 grid gap-6">
-          {/* tanggal */}
           <div>
             <label className="text-sm font-semibold text-slate-700">Tanggal</label>
             <select
@@ -127,7 +153,6 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel }) {
             </select>
           </div>
 
-          {/* qty */}
           <div>
             <label className="text-sm font-semibold text-slate-700">Qty</label>
             <input
@@ -140,7 +165,6 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel }) {
             />
           </div>
 
-          {/* summary */}
           <div className="rounded-[22px] bg-skysoft-50 border border-skysoft-100 p-6">
             <div className="flex items-center justify-between">
               <div className="text-lg font-black text-slate-900">Summary</div>
@@ -155,9 +179,7 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel }) {
 
             <div className="mt-6 flex items-center justify-between border-t border-skysoft-100 pt-6">
               <div className="text-base text-slate-600">Total</div>
-              <div className="text-2xl font-black text-slate-900">
-                {calcTotal(tier.price, qty)}
-              </div>
+              <div className="text-2xl font-black text-slate-900">{calcTotal(tier.price, qty)}</div>
             </div>
           </div>
 
@@ -165,26 +187,13 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel }) {
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.99 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
-            onClick={() => alert(`Checkout: ${tier.name} • ${dayLabel} • Qty ${qty}`)}
+            onClick={onBuy}
             className="w-full py-5 rounded-2xl bg-skysoft-600 text-white font-black shadow-soft hover:opacity-95 text-lg"
           >
             Buy Ticket
           </motion.button>
         </div>
       </div>
-    </motion.div>
-  );
-}
-
-function HoverLinkButton({ to, children }) {
-  return (
-    <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.99 }}>
-      <Link
-        to={to}
-        className="inline-flex px-6 py-3 rounded-2xl bg-white border border-skysoft-200 text-slate-900 font-black hover:bg-skysoft-50"
-      >
-        {children}
-      </Link>
     </motion.div>
   );
 }

@@ -10,21 +10,21 @@ export const eventMock = {
   tiers: [
     {
       id: "vip-pink",
-      name: "VIP Pink",
+      name: "VIP",
       price: "Rp 2.500.000",
       desc: "Best view + akses eksklusif paling dekat panggung.",
       perks: ["Best view", "Priority entry", "Merch pack", "QR e-ticket"],
     },
     {
       id: "cat-1-sky",
-      name: "Cat 1 Sky",
+      name: "ADVANCE",
       price: "Rp 1.750.000",
       desc: "Tribune utama, view nyaman dan value terbaik.",
       perks: ["Tribune utama", "Entry reguler", "Akses merch", "QR e-ticket"],
     },
     {
       id: "festival",
-      name: "Festival",
+      name: "REGULER",
       price: "Rp 1.250.000",
       desc: "Standing area paling seru buat sing-along.",
       perks: ["Standing area", "First come", "Akses merch", "QR e-ticket"],
@@ -38,17 +38,17 @@ export const featuredTickets = [
     venue: "GBK Stadium",
     date: "2026-05-21",
     tiers: [
-      { name: "VIP Pink", price: "Rp 2.500.000" },
-      { name: "Cat 1 Sky", price: "Rp 1.750.000" },
-      { name: "Festival", price: "Rp 1.250.000" },
+      { name: "VIP", price: "Rp 2.500.000" },
+      { name: "ADVANCE", price: "Rp 1.750.000" },
+      { name: "REGULER", price: "Rp 1.250.000" },
     ],
   },
 ];
 
 export const popularShows = [
   { title: "H2H: Skywave Night", city: "Jakarta" },
-  { title: "H2H: Pink Pulse Live", city: "Bandung" },
-  { title: "H2H: Hearts Unite", city: "Surabaya" },
+  { title: "H2H: Pink Pulse Live", city: "Jakarta" },
+  { title: "H2H: Hearts Unite", city: "Jakarta" },
   { title: "H2H: Fanmeet Special", city: "Yogyakarta" },
   { title: "H2H: Encore Session", city: "Bali" },
 ];
@@ -83,3 +83,51 @@ export const userDashboardMock = {
     checkInAt: null,
   },
 };
+
+import fanlightImg from "../assets/merch/Fanlight.webp";
+import photobookImg from "../assets/merch/Photobook.webp";
+import albumImg from "../assets/merch/MiniAlbum.webp";
+import tshirtImg from "../assets/merch/Tshirt.webp";
+
+export const merchProducts = [
+  {
+    id: "fanlight",
+    name: "H2H Fanlight",
+    category: "Accessories",
+    desc: "Fanlight official dengan desain unik dan fitur canggih.",
+    detail:
+      "Nyalakan momen konsermu bareng Heart2Hearts dengan fanlight yang nyaman digenggam dan tampil elegan saat menyala. Warna cahaya bisa kamu atur untuk menyesuaikan mood lagu dari vibe hangat pas ballad sampai terang maksimal saat lagu hype. Cocok buat fanchant, recording fancam, sampai jadi pajangan cantik di kamar sebagai simbol ‘we’re in this together, heart to heart’.",
+    badge: "NEW",
+    image: fanlightImg,
+  },
+  {
+    id: "photobook",
+    name: "Photobook H2H",
+    category: "Photobook",
+    desc: "Photobook official dengan kualitas gambar tinggi dan desain eksklusif.",
+    detail:
+      "Photobook koleksi wajib buat para Heartsu dibuat dengan kualitas cetak tajam dan tone warna yang rich, bikin tiap ekspresi dan detail styling terlihat hidup. Berisi 100 halaman foto eksklusif dari beberapa konsep pemotretan: mulai dari look yang soft & dreamy sampai aura stage-ready yang bold. Pas buat kamu yang suka ‘rewatch’ era comeback, cari bias-wrecker moment, atau sekadar menikmati visual Heart2Hearts kapan pun tanpa nunggu timeline rame.",
+    badge: "NEW",
+    image: photobookImg,
+  },
+  {
+    id: "mini-album",
+    name: "Mini Album H2H",
+    category: "Album",
+    desc: "Mini album official dengan playlist yang lengkap dan desain eksklusif.",
+    detail:
+      "Mini album yang dirancang buat nemenin harimu dari track pertama sampai terakhir—ringkas, tapi berasa penuh. Di dalamnya ada 1 CD berisi 5 lagu hits Heart2Hearts yang siap kamu putar ulang saat ngerjain tugas, commute, atau healing malam. Packaging-nya dibuat collectible dengan desain eksklusif yang cocok dipajang bareng koleksi era-era H2H lainnya—biar setiap comeback terasa ‘nempel’ dan jadi bagian dari cerita fandom kamu.",
+    badge: "NEW",
+    image: albumImg,
+  },
+  {
+    id: "tshirt-set",
+    name: "Tshirt Set",
+    category: "Apparel",
+    desc: "Tshirt official dengan desain eksklusif dan ada foto idolamu.",
+    detail:
+      "Tshirt yang siap jadi ‘uniform’ fandom kamu—desainnya clean tapi statement, dengan visual Heart2Hearts yang bikin look kamu langsung keliatan stan approved. Bahannya nyaman dipakai harian: buat nonton konten H2H maraton, datang ke event, sampai mix & match streetwear. Set berisi 1 tshirt ukuran M/L/XL sesuai pilihan, dan paling pas dipadukan dengan aksesori favoritmu biar vibe kamu makin ‘heart to heart’.",
+    badge: "NEW",
+    image: tshirtImg,
+  },
+];

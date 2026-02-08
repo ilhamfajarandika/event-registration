@@ -3,14 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import UserNavbar from "../../components/UserNavbar";
 import Footer from "../../components/Footer";
 
-/**
- * NOTE:
- * - Ini masih pakai mock state (frontend-only).
- * - Nantinya tinggal sambungkan ke backend:
- *   GET /api/auth/me (untuk load data)
- *   PUT /api/auth/me (untuk update)
- */
-
 export default function Profile() {
   // Mock user (nanti ganti dari API / state global)
   const user = useMemo(
@@ -40,8 +32,6 @@ export default function Profile() {
 
       <div className="max-w-4xl mx-auto px-4 py-10">
         <h1 className="text-xl md:text-2xl font-black text-white">Edit profil</h1>
-
-        {/* Card: User header */}
         <div className="mt-6 rounded-[22px] bg-white/10 border border-white/10 shadow-soft overflow-hidden">
           <div className="p-5 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -62,7 +52,6 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Gmail (read only) */}
         <Section title="Gmail">
           <ReadOnlyInput value={profile.gmail} placeholder="Gmail" />
           <p className="mt-2 text-xs text-white/50">
@@ -70,12 +59,10 @@ export default function Profile() {
           </p>
         </Section>
 
-        {/* Nomor Telepon (display; edit via modal) */}
         <Section title="Nomor Telepon">
           <ReadOnlyInput value={profile.phone} placeholder="Nomor Telepon" />
         </Section>
 
-        {/* Jenis Kelamin (read only) */}
         <Section title="Jenis Kelamin">
           <ReadOnlySelect value={profile.gender} />
           <p className="mt-2 text-xs text-white/50">
@@ -83,12 +70,10 @@ export default function Profile() {
           </p>
         </Section>
 
-        {/* Footer note */}
         <div className="mt-8 text-xs text-white/50">
           Info profil tertentu, seperti nama, email, dan nomor telepon, bisa digunakan untuk kebutuhan akun.
         </div>
 
-        {/* Button bottom */}
         <div className="mt-10 flex justify-end">
           <button
             type="button"
@@ -102,7 +87,6 @@ export default function Profile() {
 
       <Footer />
 
-      {/* Modal Edit */}
       <EditProfileModal
         open={openEdit}
         onClose={() => setOpenEdit(false)}
@@ -174,9 +158,7 @@ function Avatar({ name, url }) {
   );
 }
 
-/* ===========================
-   MODAL: Edit Profile
-=========================== */
+
 function EditProfileModal({ open, onClose, initial, onSave }) {
   const [form, setForm] = useState(() => ({
     name: initial?.name || "",
@@ -210,14 +192,12 @@ function EditProfileModal({ open, onClose, initial, onSave }) {
     if (form.password !== form.confirmPassword)
       return setErr("Konfirmasi password tidak sama.");
 
-    // TODO: panggil backend PUT /api/auth/me
-    // Untuk sekarang update local state:
     onSave?.({
       ...initial,
       name: form.name,
       gmail: form.email,
       phone: form.phone,
-      // gender tetap read-only
+
     });
   };
 
@@ -225,7 +205,6 @@ function EditProfileModal({ open, onClose, initial, onSave }) {
     <AnimatePresence>
       {open && (
         <>
-          {/* overlay */}
           <motion.button
             type="button"
             onClick={onClose}
@@ -236,7 +215,6 @@ function EditProfileModal({ open, onClose, initial, onSave }) {
             aria-label="Close modal"
           />
 
-          {/* wrapper scroll safe */}
           <motion.div
             className="fixed inset-0 z-[71] overflow-y-auto"
             initial={{ opacity: 0 }}
