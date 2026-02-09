@@ -7,7 +7,7 @@ import { eventMock } from "../../data/mock.js";
 
 export default function UserDashboard() {
   const userName = useMemo(() => {
-    const raw = localStorage.getItem("h2h_auth");
+    const raw = localStorage.getItem("user");
     const parsed = raw ? JSON.parse(raw) : null;
     return parsed?.name || "Aji";
   }, []);
@@ -25,7 +25,10 @@ export default function UserDashboard() {
     dateLabel: eventMock.dates?.[0]?.label || "14 Februari",
   }));
 
-  const tier = useMemo(() => eventMock.tiers.find((t) => t.id === ticket.tierId), [ticket.tierId]);
+  const tier = useMemo(
+    () => eventMock.tiers.find((t) => t.id === ticket.tierId),
+    [ticket.tierId],
+  );
 
   const [qrOpen, setQrOpen] = useState(false);
 
@@ -52,12 +55,13 @@ export default function UserDashboard() {
                 </span>
               </div>
 
-              <h1 className="mt-4 text-3xl md:text-4xl font-black text-slate-900">
+              <h1 className="mt-4 text-3xl md:text-4xl font-black text-slate-900 capitalize">
                 Hi, {userName} <span className="inline-block">👋</span>
               </h1>
 
               <p className="mt-2 text-slate-600 max-w-2xl">
-                Pantau status pembelian ticket, akses QR e-ticket, dan lihat detail konser.
+                Pantau status pembelian ticket, akses QR e-ticket, dan lihat
+                detail konser.
               </p>
             </div>
           </div>
@@ -72,8 +76,12 @@ export default function UserDashboard() {
           <div className="p-6 md:p-8 -mt-10">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="text-xs font-black text-skysoft-700">YOUR TICKET</div>
-                <h2 className="mt-1 text-2xl font-black text-slate-900">{ticket.eventTitle}</h2>
+                <div className="text-xs font-black text-skysoft-700">
+                  YOUR TICKET
+                </div>
+                <h2 className="mt-1 text-2xl font-black text-slate-900">
+                  {ticket.eventTitle}
+                </h2>
                 <div className="mt-1 text-sm text-slate-600">
                   {ticket.venue} • {ticket.dateLabel} • {ticket.city}
                 </div>
@@ -113,7 +121,9 @@ export default function UserDashboard() {
 
                   <button
                     type="button"
-                    onClick={() => alert("TODO: route ke /events atau /events/:id")}
+                    onClick={() =>
+                      alert("TODO: route ke /events atau /events/:id")
+                    }
                     className="px-5 py-3 rounded-2xl bg-white border border-skysoft-200 text-skysoft-700 font-black hover:bg-skysoft-50 transition"
                   >
                     Event Detail
@@ -122,9 +132,24 @@ export default function UserDashboard() {
               </div>
 
               <div className="mt-6 grid md:grid-cols-3 gap-4">
-                <StepCard title="Order created" desc="Kamu memilih seat & qty." active percent={100} />
-                <StepCard title="Payment verified" desc="Tiket aktif & QR tersedia." active percent={100} />
-                <StepCard title="Checked-in" desc="QR sudah discan di venue." active={false} percent={0} />
+                <StepCard
+                  title="Order created"
+                  desc="Kamu memilih seat & qty."
+                  active
+                  percent={100}
+                />
+                <StepCard
+                  title="Payment verified"
+                  desc="Tiket aktif & QR tersedia."
+                  active
+                  percent={100}
+                />
+                <StepCard
+                  title="Checked-in"
+                  desc="QR sudah discan di venue."
+                  active={false}
+                  percent={0}
+                />
               </div>
             </div>
           </div>
@@ -174,7 +199,9 @@ function StepCard({ title, desc, active, percent }) {
         />
       </div>
 
-      <div className="mt-2 text-[11px] text-slate-500">{active ? "Active" : "Pending"}</div>
+      <div className="mt-2 text-[11px] text-slate-500">
+        {active ? "Active" : "Pending"}
+      </div>
     </div>
   );
 }

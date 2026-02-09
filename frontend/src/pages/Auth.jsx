@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { login, register } from "../auth/AuthService";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -8,6 +9,11 @@ export default function Auth() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("signin"); // signin | signup
 
   // ✅ sync mode dengan query param (klik navbar akan langsung ngubah UI)
@@ -29,23 +35,61 @@ export default function Auth() {
   };
 
   // ✅ handler login/signup -> simpan session sederhana -> redirect dashboard
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // TODO: nanti ganti call backend beneran
     // contoh endpoint:
     // signin  -> POST /api/auth/login
     // signup  -> POST /api/auth/register
 
-    localStorage.setItem(
-      "h2h_auth",
-      JSON.stringify({
-        isLoggedIn: true,
-        role: "user", // nanti bisa "admin"
-        mode: isSignup ? "signup" : "signin",
-        loginAt: new Date().toISOString(),
-      })
-    );
+    setError("");
+    setLoading(true);
 
-    navigate("/dashboard");
+    // try {
+    //   const endpoint = isSignup ? "/auth/register" : "/auth/login";
+
+    //   const payload = isSignup
+    //     ? { name: fullName, email, password }
+    //     : { email, password };
+
+    //   const res = await api.post(endpoint, payload);
+
+    //   localStorage.setItem("token", res.data.token);
+    //   localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    //   localStorage.setItem(
+    //     "h2h_auth",
+    //     JSON.stringify({
+    //       isLoggedIn: true,
+    //       role: "user", // nanti bisa "admin"
+    //       mode: isSignup ? "signup" : "signin",
+    //       loginAt: new Date().toISOString(),
+    //     }),
+    //   );
+    //   navigate("/dashboard");
+    // } catch (error) {
+    //   setError(error.response?.data?.message || "Login Failed");
+    // }
+
+    try {
+      if (isSignup) {
+        await register({
+          name: fullName,
+          email,
+          password,
+        });
+      } else {
+        await login({
+          email,
+          password,
+        });
+      }
+
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      setError(err.response?.data?.message || "Authentication failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -121,6 +165,8 @@ export default function Auth() {
                     <input
                       className="mt-2 w-full px-4 py-3.5 rounded-2xl bg-white border border-skysoft-200 outline-none focus:ring-4 focus:ring-skysoft-200"
                       placeholder="Nama kamu"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
                     />
                   </div>
                 )}
@@ -132,6 +178,8 @@ export default function Auth() {
                   <input
                     className="mt-2 w-full px-4 py-3.5 rounded-2xl bg-white border border-skysoft-200 outline-none focus:ring-4 focus:ring-skysoft-200"
                     placeholder="you@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
@@ -143,6 +191,8 @@ export default function Auth() {
                     type="password"
                     className="mt-2 w-full px-4 py-3.5 rounded-2xl bg-white border border-skysoft-200 outline-none focus:ring-4 focus:ring-skysoft-200"
                     placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
@@ -194,8 +244,9 @@ export default function Auth() {
                       Already have an account?{" "}
                       <button
                         type="button"
-                        onClick={setSignin}
+                        // onClick={setSignin}
                         className="font-black text-skysoft-700 hover:underline"
+                        disabled={loading}
                       >
                         Login
                       </button>

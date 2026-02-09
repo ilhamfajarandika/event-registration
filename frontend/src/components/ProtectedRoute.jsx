@@ -1,11 +1,10 @@
-import React from "react";
 import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
-  const raw = localStorage.getItem("h2h_auth");
-  const auth = raw ? JSON.parse(raw) : null;
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
 
-  if (!auth?.isLoggedIn) {
+  if (!token || !user) {
     return <Navigate to="/auth?mode=signin" replace />;
   }
 

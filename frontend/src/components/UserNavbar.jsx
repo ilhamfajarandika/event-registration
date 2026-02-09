@@ -7,7 +7,7 @@ export default function UserNavbar() {
   const navigate = useNavigate();
 
   const user = useMemo(() => {
-    const raw = localStorage.getItem("h2h_auth");
+    const raw = localStorage.getItem("user");
     const parsed = raw ? JSON.parse(raw) : null;
     return {
       name: parsed?.name || "Aji",
@@ -129,7 +129,9 @@ export default function UserNavbar() {
                 </div>
 
                 <div className="mt-6 rounded-[22px] bg-skysoft-50 border border-skysoft-100 p-5">
-                  <div className="font-black text-slate-900">Tips sebelum konser</div>
+                  <div className="font-black text-slate-900">
+                    Tips sebelum konser
+                  </div>
 
                   <ul className="mt-3 space-y-2 text-sm text-slate-700">
                     <li className="flex items-start gap-2">
@@ -177,7 +179,9 @@ function TopNavItem({ to, children }) {
       to={to}
       className={({ isActive }) =>
         `px-4 py-2 rounded-2xl font-black transition ${
-          isActive ? "bg-skysoft-100 text-skysoft-700" : "text-slate-700 hover:bg-skysoft-50"
+          isActive
+            ? "bg-skysoft-100 text-skysoft-700"
+            : "text-slate-700 hover:bg-skysoft-50"
         }`
       }
     >
@@ -189,11 +193,16 @@ function TopNavItem({ to, children }) {
 function DrawerButton({ label, onClick, variant }) {
   const base =
     "w-full text-left px-5 py-4 rounded-2xl border font-black transition shadow-soft";
-  const normal = "bg-white border-skysoft-200 hover:bg-skysoft-50 text-slate-900";
+  const normal =
+    "bg-white border-skysoft-200 hover:bg-skysoft-50 text-slate-900";
   const dark = "bg-slate-900 border-slate-900 hover:opacity-95 text-white";
 
   return (
-    <button type="button" onClick={onClick} className={`${base} ${variant === "dark" ? dark : normal}`}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`${base} ${variant === "dark" ? dark : normal}`}
+    >
       {label}
     </button>
   );
