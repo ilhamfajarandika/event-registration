@@ -29,6 +29,8 @@ import VipUserSeat from "./pages/user/seats/VipUserSeat";
 import AdvanceUserSeat from "./pages/user/seats/AdvanceUserSeat";
 import RegulerUserSeat from "./pages/user/seats/RegulerUserSeat";
 
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+
 // ✅ Protected Route component
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -63,6 +65,9 @@ export default function App() {
         <Route path="/user/seats/vip-pink" element={<ProtectedRoute><VipUserSeat /></ProtectedRoute>} />
         <Route path="/user/seats/cat-1-sky" element={<ProtectedRoute><AdvanceUserSeat /></ProtectedRoute>} />
         <Route path="/user/seats/festival" element={<ProtectedRoute><RegulerUserSeat /></ProtectedRoute>} />
+
+        //✅ admin pages Route (PROTECTED)
+        <Route path="/admin" element={<AdminDashboard />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
