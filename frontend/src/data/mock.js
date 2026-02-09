@@ -131,3 +131,90 @@ export const merchProducts = [
     image: tshirtImg,
   },
 ];
+
+
+
+export const adminStats = [
+  { label: "Total Sales", value: "1,457", sub: "Ticket sold", icon: "💳" },
+  { label: "Users", value: "1,457", sub: "Registered users", icon: "👤" },
+  { label: "Open Rate", value: "1,457%", sub: "Opening Web", icon: "📬" },
+  { label: "Review Score", value: "4.8", sub: "Web Performance", icon: "🖱️" },
+];
+
+export const adminInboxItems = [
+  { name: "Emily Butler", tag: "new", msg: "I’m having trouble accessing my QR ticket." },
+  { name: "Eugenia Bates", tag: "open", msg: "Can I change the concert date after purchase?" },
+  { name: "Brett Jennings", tag: "open", msg: "Payment success but ticket not showing in dashboard." },
+  { name: "Cory Chandler", tag: "new", msg: "Is VIP merch pack available on site pickup?" },
+  { name: "Rockson Rhodes", tag: "open", msg: "Need invoice for my company purchase." },
+];
+
+// ✅ ADMIN MOCK: daftar pembeli ticket (nanti ganti dari backend)
+export const adminTicketBuyersMock = [
+  {
+    id: "U-001",
+    name: "Aji",
+    email: "aji@email.com",
+    status: "PAID",
+    tierId: "vip-pink",
+    tierName: "VIP",
+    qty: 2,
+    date: "2026-02-14",
+
+    // ✅ tambahan check-in (scan QR)
+    checkedIn: true,
+    checkedInAt: "2026-02-14 17:42",
+  },
+  {
+    id: "U-002",
+    name: "Nandana",
+    email: "nandana@email.com",
+    status: "PAID",
+    tierId: "cat-1-sky",
+    tierName: "ADVANCE",
+    qty: 1,
+    date: "2026-02-15",
+
+    checkedIn: false,
+    checkedInAt: null,
+  },
+  {
+    id: "U-003",
+    name: "Raka",
+    email: "raka@email.com",
+    status: "PENDING",
+    tierId: "festival",
+    tierName: "REGULER",
+    qty: 1,
+    date: "2026-02-14",
+
+    checkedIn: false,
+    checkedInAt: null,
+  },
+  {
+    id: "U-004",
+    name: "Sinta",
+    email: "sinta@email.com",
+    status: "UNPAID",
+    tierId: "cat-1-sky",
+    tierName: "ADVANCE",
+    qty: 2,
+    date: "2026-02-15",
+
+    checkedIn: false,
+    checkedInAt: null,
+  },
+  {
+    id: "U-005",
+    name: "Dimas",
+    email: "dimas@email.com",
+    status: "PAID",
+    tierId: "festival",
+    tierName: "REGULER",
+    qty: 1,
+    date: "2026-02-14",
+
+    checkedIn: true,
+    checkedInAt: "2026-02-14 18:10",
+  },
+];
