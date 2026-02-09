@@ -8,7 +8,7 @@ export default function UserNavbar() {
   const navigate = useNavigate();
 
   const user = useMemo(() => {
-    const raw = localStorage.getItem("h2h_auth");
+    const raw = localStorage.getItem("user");
     const parsed = raw ? JSON.parse(raw) : null;
     return {
       name: parsed?.name || "Aji",
@@ -23,7 +23,10 @@ export default function UserNavbar() {
         <div className="bg-skysoft-100/80 backdrop-blur border-b border-white/60">
           <div className="max-w-6xl mx-auto px-4 py-3">
             <div className="relative flex items-center justify-between gap-3">
-              <Link to="/dashboard" className="flex items-center gap-2 shrink-0">
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-2 shrink-0"
+              >
                 <img
                   src={logo}
                   alt="Heart2Hearts Logo"
@@ -193,7 +196,8 @@ function TopNavItem({ to, children }) {
 function DrawerButton({ label, onClick, variant }) {
   const base =
     "w-full text-left px-5 py-4 rounded-2xl border font-black transition shadow-soft";
-  const normal = "bg-white border-skysoft-200 hover:bg-skysoft-50 text-slate-900";
+  const normal =
+    "bg-white border-skysoft-200 hover:bg-skysoft-50 text-slate-900";
   const dark = "bg-slate-900 border-slate-900 hover:opacity-95 text-white";
 
   return (
