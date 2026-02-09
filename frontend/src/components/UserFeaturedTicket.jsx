@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 import { eventMock } from "../data/mock.js";
 
-export default function FeaturedTickets() {
+export default function UserFeaturedTickets({ onBuyNow }) {
+  const defaultQty = 1;
+  const defaultDate = eventMock.dates?.[0]?.value || "";
+
   return (
     <section className="max-w-6xl mx-auto px-4 py-10">
       <div className="text-center">
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900">
-          Seat Tiers & Pricing
-        </h2>
-        <p className="mt-2 text-slate-600">
-          Harga Tier Seat.
-        </p>
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900">Seat Tiers & Pricing</h2>
+        <p className="mt-2 text-slate-600">Harga Tier Seat.</p>
       </div>
 
       <div className="mt-7 grid md:grid-cols-3 gap-5">
@@ -38,19 +37,29 @@ export default function FeaturedTickets() {
                 <div className="text-xl font-black text-slate-900">{tier.price}</div>
               </div>
 
-              <Link
-                to={`/seats/${tier.id}`}
-                className="mt-5 block text-center w-full py-2.5 rounded-2xl bg-skysoft-600 text-white font-black hover:opacity-95"
-              >
-                Buy Now
-              </Link>
+              {onBuyNow ? (
+                <button
+                  type="button"
+                  onClick={() => onBuyNow({ tierId: tier.id, qty: defaultQty, date: defaultDate })}
+                  className="mt-5 block text-center w-full py-2.5 rounded-2xl bg-skysoft-600 text-white font-black hover:opacity-95"
+                >
+                  Buy Now
+                </button>
+              ) : (
+                <Link
+                  to={`/user/seats/${tier.id}`}
+                  className="mt-5 block text-center w-full py-2.5 rounded-2xl bg-skysoft-600 text-white font-black hover:opacity-95"
+                >
+                  Buy Now
+                </Link>
+              )}
             </div>
           </div>
         ))}
       </div>
 
       <div className="mt-6 text-center text-xs text-slate-500">
-        Venue: <span className="font-semibold text-slate-700">{eventMock.venue}</span>  
+        Venue: <span className="font-semibold text-slate-700">{eventMock.venue}</span>
       </div>
     </section>
   );

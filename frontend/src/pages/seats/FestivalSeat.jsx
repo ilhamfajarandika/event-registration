@@ -1,20 +1,45 @@
 import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "../../components/Navbar.jsx";
 import { eventMock } from "../../data/mock.js";
 
 export default function FestivalSeat() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [sp] = useSearchParams();
+
   const tier = useMemo(() => eventMock.tiers.find((t) => t.id === "festival"), []);
-  const [qty, setQty] = useState(1);
-  const [day, setDay] = useState(eventMock.dates[0]?.value ?? "");
+
+  const initialQty = Math.max(1, Number(sp.get("qty") || 1));
+  const initialDate = sp.get("date") || eventMock.dates[0]?.value || "";
+
+  const [qty, setQty] = useState(initialQty);
+  const [day, setDay] = useState(initialDate);
+
   const dayLabel = eventMock.dates.find((d) => d.value === day)?.label ?? day;
+
+  const handleBuy = () => {
+    const raw = localStorage.getItem("h2h_auth");
+    const auth = raw ? JSON.parse(raw) : null;
+    const isLoggedIn = Boolean(auth?.isLoggedIn);
+
+    if (!isLoggedIn) {
+      const redirectTo = `${location.pathname}?date=${encodeURIComponent(day)}&qty=${encodeURIComponent(
+        qty
+      )}`;
+      navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`);
+      return;
+    }
+
+    alert(`✅ Logged in. Proceed checkout: ${tier?.name} • ${dayLabel} • Qty ${qty}`);
+  };
 
   if (!tier) return null;
 
   return (
     <motion.div
-      className="min-h-screen bg-[#F3FBFF]" // ✅ beda background (Festival lebih sky / energetic)
+      className="min-h-screen bg-[#F3FBFF]"
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
@@ -24,21 +49,17 @@ export default function FestivalSeat() {
 
       <section className="max-w-6xl mx-auto px-4 pt-10 pb-12">
         <div className="grid lg:grid-cols-2 gap-10">
-          {/* LEFT CARD */}
           <motion.div
             whileHover={{ y: -4 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
             className="rounded-[28px] bg-white border border-white/70 shadow-soft overflow-hidden"
           >
-            {/* ✅ Festival gradient lebih “hype” */}
             <div className="h-24 bg-gradient-to-r from-skysoft-600/85 via-white to-pinkpop-500/40" />
 
             <div className="p-8">
-              <div className="text-xs font-black text-skysoft-700">FESTIVAL</div>
               <h1 className="mt-3 text-4xl font-black text-slate-900">{tier.name}</h1>
               <p className="mt-2 text-slate-600 text-lg">{tier.desc}</p>
 
-              {/* 4 info cards (Festival tone) */}
               <div className="mt-8 grid sm:grid-cols-2 gap-5">
                 <InfoPill accent="sky" title="Standing area" text="Paling seru buat sing-along." />
                 <InfoPill accent="sky" title="Hype vibes" text="Feel crowd & energy konser maksimal." />
@@ -46,7 +67,6 @@ export default function FestivalSeat() {
                 <InfoPill accent="sky" title="QR e-ticket" text="Scan masuk lebih cepat." />
               </div>
 
-              {/* Venue + price + perks */}
               <div className="mt-8 rounded-[24px] bg-skysoft-50 border border-skysoft-100 p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="text-lg font-black text-slate-900">{eventMock.venue}</div>
@@ -66,16 +86,9 @@ export default function FestivalSeat() {
                   ))}
                 </ul>
               </div>
-
-              {/* bottom nav buttons */}
-              <div className="mt-8 flex gap-4">
-                <HoverLinkButton to="/seats/vip-pink" accent="sky">View VIP</HoverLinkButton>
-                <HoverLinkButton to="/seats/cat-1-sky" accent="sky">View Cat 1</HoverLinkButton>
-              </div>
             </div>
           </motion.div>
 
-          {/* RIGHT CHECKOUT CARD */}
           <CheckoutCard
             tier={tier}
             day={day}
@@ -84,6 +97,11 @@ export default function FestivalSeat() {
             setQty={setQty}
             dayLabel={dayLabel}
             accent="sky"
+            onClose={() => {
+              if (window.history.length > 1) navigate(-1);
+              else navigate("/events");
+            }}
+            onBuy={handleBuy}
           />
         </div>
       </section>
@@ -105,18 +123,29 @@ function InfoPill({ title, text, accent = "sky" }) {
   );
 }
 
-function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "sky" }) {
+function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "sky", onClose, onBuy }) {
   const btn = accent === "sky" ? "bg-skysoft-600" : "bg-pinkpop-500";
   const ring = accent === "sky" ? "focus:ring-skysoft-200" : "focus:ring-pinkpop-500/20";
   const border = accent === "sky" ? "border-skysoft-200" : "border-pinkpop-500/20";
-  const summaryBg = accent === "sky" ? "bg-skysoft-50 border-skysoft-100" : "bg-pinkpop-500/10 border-pinkpop-500/20";
+  const summaryBg =
+    accent === "sky" ? "bg-skysoft-50 border-skysoft-100" : "bg-pinkpop-500/10 border-pinkpop-500/20";
 
   return (
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
-      className="rounded-[28px] bg-white border border-white/70 shadow-soft overflow-hidden"
+      className="rounded-[28px] bg-white border border-white/70 shadow-soft overflow-hidden relative"
     >
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute right-4 top-4 h-11 w-11 rounded-2xl bg-white border border-slate-200 shadow-soft hover:bg-slate-50 transition font-black text-slate-900"
+        aria-label="Close checkout"
+        title="Close"
+      >
+        ✕
+      </button>
+
       <div className="p-8">
         <div className="text-xs font-black text-slate-900 tracking-wide">CHECKOUT</div>
         <h2 className="mt-4 text-4xl font-black text-slate-900">Buy {tier.name}</h2>
@@ -163,9 +192,7 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "sky"
 
             <div className="mt-6 flex items-center justify-between border-t border-white/50 pt-6">
               <div className="text-base text-slate-600">Total</div>
-              <div className="text-2xl font-black text-slate-900">
-                {calcTotal(tier.price, qty)}
-              </div>
+              <div className="text-2xl font-black text-slate-900">{calcTotal(tier.price, qty)}</div>
             </div>
           </div>
 
@@ -173,7 +200,7 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "sky"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.99 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
-            onClick={() => alert(`Checkout: ${tier.name} • ${dayLabel} • Qty ${qty}`)}
+            onClick={onBuy}
             className={`w-full py-5 rounded-2xl ${btn} text-white font-black shadow-soft hover:opacity-95 text-lg`}
           >
             Buy Ticket
