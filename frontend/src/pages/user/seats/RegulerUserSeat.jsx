@@ -1,18 +1,18 @@
 import React, { useMemo, useState } from "react";
-import { useLocation, useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import Navbar from "../../components/Navbar.jsx";
-import { eventMock } from "../../data/mock.js";
+import UserNavbar from "../../../components/UserNavbar";
+import { eventMock } from "../../../data/mock.js";
 
-export default function VipPinkSeat() {
+export default function RegulerUserSeat() {
   const navigate = useNavigate();
   const location = useLocation();
   const [sp] = useSearchParams();
 
-  const tier = useMemo(() => eventMock.tiers.find((t) => t.id === "vip-pink"), []);
+  const tier = useMemo(() => eventMock.tiers.find((t) => t.id === "festival"), []);
 
   const initialQty = Math.max(1, Number(sp.get("qty") || 1));
-  const initialDate = sp.get("date") || eventMock.dates[0]?.value || "";
+  const initialDate = sp.get("date") || eventMock.dates?.[0]?.value || "";
 
   const [qty, setQty] = useState(initialQty);
   const [day, setDay] = useState(initialDate);
@@ -25,9 +25,7 @@ export default function VipPinkSeat() {
     const isLoggedIn = Boolean(auth?.isLoggedIn);
 
     if (!isLoggedIn) {
-      const redirectTo = `${location.pathname}?date=${encodeURIComponent(day)}&qty=${encodeURIComponent(
-        qty
-      )}`;
+      const redirectTo = `${location.pathname}?date=${encodeURIComponent(day)}&qty=${encodeURIComponent(qty)}`;
       navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`);
       return;
     }
@@ -39,13 +37,13 @@ export default function VipPinkSeat() {
 
   return (
     <motion.div
-      className="min-h-screen bg-[#FFF7FB]"
+      className="min-h-screen bg-[#F7FBFF]"
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      <Navbar />
+      <UserNavbar />
 
       <section className="max-w-6xl mx-auto px-4 pt-10 pb-12">
         <div className="grid lg:grid-cols-2 gap-10">
@@ -54,29 +52,29 @@ export default function VipPinkSeat() {
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
             className="rounded-[28px] bg-white border border-white/70 shadow-soft overflow-hidden"
           >
-            <div className="h-24 bg-gradient-to-r from-pinkpop-500/85 via-white to-skysoft-300/60" />
+            <div className="h-24 bg-gradient-to-r from-skysoft-600/70 via-white to-pinkpop-500/25" />
 
             <div className="p-8">
               <h1 className="mt-3 text-4xl font-black text-slate-900">{tier.name}</h1>
               <p className="mt-2 text-slate-600 text-lg">{tier.desc}</p>
 
               <div className="mt-8 grid sm:grid-cols-2 gap-5">
-                <InfoPill accent="pink" title="Best view" text="Paling dekat panggung, detail maksimal." />
-                <InfoPill accent="pink" title="Priority entry" text="Masuk venue lebih dulu, anti antri." />
-                <InfoPill accent="pink" title="Merch pack" text="Bonus merch eksklusif VIP." />
-                <InfoPill accent="pink" title="QR e-ticket" text="Scan cepat, aman, dan praktis." />
+                <InfoPill title="Best for budget" text="Harga paling friendly buat ikut konser." />
+                <InfoPill title="Good vibe" text="Tetap seru bareng crowd!" />
+                <InfoPill title="QR e-ticket" text="Check-in cepat dan aman." />
+                <InfoPill title="Merch access" text="Akses area merchandise." />
               </div>
 
-              <div className="mt-8 rounded-[24px] bg-pinkpop-500/10 border border-pinkpop-500/20 p-6">
+              <div className="mt-8 rounded-[24px] bg-skysoft-50 border border-skysoft-100 p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="text-lg font-black text-slate-900">{eventMock.venue}</div>
                   <div className="text-2xl font-black text-slate-900">{tier.price}</div>
                 </div>
 
                 <ul className="mt-5 space-y-3">
-                  {tier.perks.map((p) => (
+                  {tier.perks?.map((p) => (
                     <li key={p} className="flex items-start gap-3 text-slate-700">
-                      <span className="mt-2 h-2.5 w-2.5 rounded-full bg-pinkpop-500" />
+                      <span className="mt-2 h-2.5 w-2.5 rounded-full bg-skysoft-600" />
                       <span className="text-base">{p}</span>
                     </li>
                   ))}
@@ -92,10 +90,9 @@ export default function VipPinkSeat() {
             qty={qty}
             setQty={setQty}
             dayLabel={dayLabel}
-            accent="pink"
             onClose={() => {
               if (window.history.length > 1) navigate(-1);
-              else navigate("/events");
+              else navigate("/user-event");
             }}
             onBuy={handleBuy}
           />
@@ -105,13 +102,12 @@ export default function VipPinkSeat() {
   );
 }
 
-function InfoPill({ title, text, accent = "pink" }) {
-  const border = accent === "pink" ? "border-pinkpop-500/20" : "border-skysoft-100";
+function InfoPill({ title, text }) {
   return (
     <motion.div
       whileHover={{ y: -2 }}
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
-      className={`rounded-[18px] bg-white border ${border} p-5`}
+      className="rounded-[18px] bg-white border border-skysoft-100 p-5"
     >
       <div className="text-lg font-black text-slate-900">{title}</div>
       <div className="mt-1 text-sm text-slate-600">{text}</div>
@@ -119,13 +115,7 @@ function InfoPill({ title, text, accent = "pink" }) {
   );
 }
 
-function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "pink", onClose, onBuy }) {
-  const btn = accent === "pink" ? "bg-pinkpop-500" : "bg-skysoft-600";
-  const ring = accent === "pink" ? "focus:ring-pinkpop-500/20" : "focus:ring-skysoft-200";
-  const border = accent === "pink" ? "border-pinkpop-500/20" : "border-skysoft-200";
-  const summaryBg =
-    accent === "pink" ? "bg-pinkpop-500/10 border-pinkpop-500/20" : "bg-skysoft-50 border-skysoft-100";
-
+function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, onClose, onBuy }) {
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -135,7 +125,8 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "pink
       <button
         type="button"
         onClick={onClose}
-        className="absolute right-4 top-4 h-11 w-11 rounded-2xl bg-white border border-slate-200 shadow-soft hover:bg-slate-50 transition font-black text-slate-900"
+        className="absolute right-4 top-4 h-11 w-11 rounded-2xl bg-white border border-slate-200 shadow-soft
+                   hover:bg-slate-50 transition font-black text-slate-900"
         aria-label="Close checkout"
         title="Close"
       >
@@ -152,7 +143,7 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "pink
             <select
               value={day}
               onChange={(e) => setDay(e.target.value)}
-              className={`mt-3 w-full px-4 py-4 rounded-2xl bg-white border ${border} outline-none focus:ring-4 ${ring} text-lg`}
+              className="mt-3 w-full px-4 py-4 rounded-2xl bg-white border border-skysoft-200 outline-none focus:ring-4 focus:ring-skysoft-200 text-lg"
             >
               {eventMock.dates.map((d) => (
                 <option key={d.id} value={d.value}>
@@ -170,11 +161,11 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "pink
               type="number"
               min={1}
               max={10}
-              className={`mt-3 w-full px-4 py-4 rounded-2xl bg-white border ${border} outline-none focus:ring-4 ${ring} text-lg`}
+              className="mt-3 w-full px-4 py-4 rounded-2xl bg-white border border-skysoft-200 outline-none focus:ring-4 focus:ring-skysoft-200 text-lg"
             />
           </div>
 
-          <div className={`rounded-[22px] ${summaryBg} border p-6`}>
+          <div className="rounded-[22px] bg-skysoft-50 border border-skysoft-100 p-6">
             <div className="flex items-center justify-between">
               <div className="text-lg font-black text-slate-900">Summary</div>
               <div className="text-sm text-slate-600">{dayLabel}</div>
@@ -186,7 +177,7 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "pink
               <Row label="Price" value={tier.price} />
             </div>
 
-            <div className="mt-6 flex items-center justify-between border-t border-white/50 pt-6">
+            <div className="mt-6 flex items-center justify-between border-t border-skysoft-100 pt-6">
               <div className="text-base text-slate-600">Total</div>
               <div className="text-2xl font-black text-slate-900">{calcTotal(tier.price, qty)}</div>
             </div>
@@ -197,26 +188,12 @@ function CheckoutCard({ tier, day, setDay, qty, setQty, dayLabel, accent = "pink
             whileTap={{ scale: 0.99 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
             onClick={onBuy}
-            className={`w-full py-5 rounded-2xl ${btn} text-white font-black shadow-soft hover:opacity-95 text-lg`}
+            className="w-full py-5 rounded-2xl bg-skysoft-600 text-white font-black shadow-soft hover:opacity-95 text-lg"
           >
             Buy Ticket
           </motion.button>
         </div>
       </div>
-    </motion.div>
-  );
-}
-
-function HoverLinkButton({ to, children, accent = "pink" }) {
-  const border = accent === "pink" ? "border-pinkpop-500/30" : "border-skysoft-200";
-  return (
-    <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.99 }}>
-      <Link
-        to={to}
-        className={`inline-flex px-6 py-3 rounded-2xl bg-white border ${border} text-slate-900 font-black hover:bg-white/70`}
-      >
-        {children}
-      </Link>
     </motion.div>
   );
 }
